@@ -81,7 +81,7 @@ chmod +x ./init.sh
 
 ### 5. Wait
 
-It takes a bit of time to run - in particular, to change the volume key, This takes a while because it has to decrypt then re-encrypt the whole disk. Depending on the speed of your internet connection, it might also take some time to set up the docker container (R Geospatial is about 1.6GB).
+It takes a bit of time to run - in particular, to change the volume key, This takes a while because it has to decrypt then re-encrypt the whole disk - IO is usually more of a bottleneck than the crypto operations on modern CPUs with AES instructions, so it'll probably take about as long as it took to clone your machine. Depending on the speed of your internet connection, it might also take some time to set up the docker container (R Geospatial is about 1.6GB). 
 
 ### 6. Set up your Cluster
 
@@ -124,7 +124,17 @@ You should also be able to reach the rstudio container directly by putting the w
 Port 2222 is specified in the docker-compose that the init script writes out; you can change it if you need to use a different port. Why can't it just be regualar port 22, like we did to set the worker up? Because R is running in a docker container, so we need to connect to the docker container, not the worker which is hosting the docker container.
 
 ### Containers
-I've specified rocker/geospatial:4.4.2 in the init script. If you need a different image, clone this repo and modify the init script. If you need to install additional packages, you can specify a list in as R.pkgs
+I've specified rocker/geospatial:4.4.2 in the init script. If you need a different image, clone this repo and modify the init script. If you need to install additional packages, you can specify a list in R.pkgs (see information above about the parameters).
+
+### Other FAQs
+- Why can't you set up the container once, before you clone it?
+  -  ~~Because I didn't think of that at the time~~
+  - For flexibility, so it's generic and you can use whatever container you want.
+  - You could even completely repurpose this script to e.g. set up a cluter of jellyfin servers or something.
+  - Why not clone this repo and show me your cool ideas?
+-  Why don't you use Hashicorp Vault / Docker Secrets / this neat auth solution
+  - I wrote this in a couple hours to solve a problem I don't expect to have very often
+  - Why not send me a pull request?
 
 ### Example Values
 The example values above, including network addresses, credentials, etc are all made up. They won't work off the shelf, but they're easy to tailor to your environment.
