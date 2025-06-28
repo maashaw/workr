@@ -57,7 +57,7 @@ services:
       echo 'PasswordAuthentication no' >> /etc/ssh/sshd_config &&
       echo 'pubkeyAuthentication yes' >> /etc/ssh/sshd_config &&
       curl -L "$KEY_URL" -o /home/rstudio/.ssh/authorized_keys &&
-      echo "$KEY_PUB" | sudo tee -a /home/rstudio/.ssh/authorized_keys &&
+      echo '$KEY_PUB' | sudo tee -a /home/rstudio/.ssh/authorized_keys &&
       chmod 600 /home/rstudio/.ssh/authorized_keys &&
       chown rstudio:rstudio /home/rstudio/.ssh/authorized_keys &&
       service ssh start &&
