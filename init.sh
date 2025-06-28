@@ -1,5 +1,27 @@
 #!/bin/bash
 
+# This is basically a hacky sort of pseudo cloud-init lookalike for customising template VMs to create new instances
+# It makes lots of assumptions about how your machine has been set up, and there is no guarantee that it will be useful for your use cases
+# The assumptions are essentially
+# 1. Ubuntu 22.04 minimised server install
+# 2. Default disk layout with LUKS2 encryption enabled
+# 3. You intend to use Clevis for automated decryption, and have a clevis policy in mind
+# NB this script intends for you to supply two public keys - a URL to a key, and a literal.
+# If you don't want to supply a literal, define the string as empty
+# But the intention is that you want to be able to access the worker from your dev machine as well as your RServer instance.
+#
+# This script assumes that you have created files with the names below in the current directory
+# old.pw        - The current (template) LUKS2 password
+# new.pw        - The new LUKS2 password (should be unique for each instance)
+# login.pw      - The new account password (should be unique for each instance)
+# hostname.txt  - The intended hostname of this instance (should be unique for each instance)
+# ip.txt        - The intended IP and subnet for this instance (e.g. 192.168.64.1/16 - should be unique for each instance)
+# dns.txt       - The intended DNS server for this instance (e.g. 192.168.1.1)
+# interface.txt - The interface name. Try using "ip route show default | awk '{print $5}' > interface.txt" to guess automatically
+# key.pub       - A public key for a machine you want to use to access the R Worker
+# key.url       - The URL of a public key (try using "https://github.com/[username].keys" to use your github ssh key)
+# R.pkgs        - A list of R packages to install on the RServer at setup (with escaped quotes - e.g. c(\"future\", \"furrr\"))
+
 # Set variables
 LOGIN_PW=$(cat login.pw)
 HOSTNAME=$(cat hostname.txt)
