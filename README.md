@@ -2,7 +2,7 @@
 
 ## What is this project
 
-A few quick and dirty scripts to make it easier to set up an R cluster for running parallel data analyses (e.g. with parallel, future, furrr, etc).
+A few quick and dirty scripts to make it easier to set up an R cluster for running parallel data analyses (e.g. with parallel, future, furrr, etc). Incorporates a couple of quirks of my environment, including making use of full disk encryption with Clevis for automatic unlocking.
 
 ## What does it do?
 
@@ -153,6 +153,7 @@ I've specified rocker/geospatial:4.4.2 in the init script. If you need a differe
   - You can comment out the relevent lines from the script if you don't need it, and save a couple megabytes.
 - What can I specify as a Clevis policy?
   - Have a look at the docs for Clevis (at the end)
+  - It's assumed to be a SSS (Shamir Secret Sharing) Clevis Pin policy (This is flexible, but you can change the script if you need something different)
   - It's got to be valid JSON
 
 ### Example Values
