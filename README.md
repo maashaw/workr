@@ -20,7 +20,10 @@ I'll report back to you on that one. But if you just want to have a go running y
 
 ## What do I need?
 
-Some way to clone an ubuntu install and spin up a bunch of worker VMs. I'm using Proxmox, but there's no reason it wouldn't work with other hypervisors or even just cloning images onto bare metal.
+- Some way to clone an ubuntu install and spin up a bunch of worker VMs. I'm using Proxmox, but there's no reason it wouldn't work with other hypervisors or even just cloning images onto bare metal.
+- Some way to connect to the workers (e.g. ssh, serial terminal, emulated vga)
+- An internet connection during setup to download the script, packages, etc
+- Tang servers or some other kind of device to secure Clevis
 
 ## How do I do it?
 
