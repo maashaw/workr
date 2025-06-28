@@ -97,7 +97,7 @@ sudo update-initramfs -u -k 'all'
 sudo hostnamectl set-hostname $HOSTNAME
 
 # Update the login password
-echo "$(whoami):$LOGIN_PW" | sudo chpasswd
+sudo echo "$(whoami):$LOGIN_PW" | sudo chpasswd
 
 # Set the static IP and DNS details
 sudo netplan set ethernets.$INTERFACE.addresses=[$IP]
