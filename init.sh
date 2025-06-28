@@ -1,8 +1,6 @@
 #!/bin/bash
 
 # Set variables
-OLD_PW=$(cat old.pw)
-NEW_PW=$(cat new.pw)
 LOGIN_PW=$(cat login.pw)
 HOSTNAME=$(cat hostname.txt)
 IP=$(cat ip.txt)
@@ -75,13 +73,13 @@ sudo apt install -y \
     docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
 
 # Reset LUKS keys
-sudo cryptsetup luksChangeKey /dev/sda3 -d $OLD_PW $NEW_PW
+sudo cryptsetup luksChangeKey /dev/sda3 -d ./old.pw ./new.pw
 
 # Regenerate the volume encryption key
-sudo cryptsetup reencrypt /dev/sda3 -d $NEW_PW
+sudo cryptsetup reencrypt /dev/sda3 -d ./new.pw
 
 # Set up clevis for automatic policy-based decryption
-sudo clevis luks bind -y -d /dev/sda3 -k $NEW_PW sss $CLEVIS_POLICY
+sudo clevis luks bind -y -d /dev/sda3 -k ./new.pw sss "$CLEVIS_POLICY"
 
 # Set up serial port
 sudo sed -i.bak '/^GRUB_CMDLINE_LINUX/ s/^/#/' /etc/default/grub
