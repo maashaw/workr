@@ -4,6 +4,16 @@
 
 A few quick and dirty scripts to make it easier to set up an R cluster for running parallel data analyses (e.g. with parallel, future, furrr, etc).
 
+## What does it do?
+
+1. Install a bunch of packages (including Avahi for dDNS, Clevis for policy-based decryption, Docker, Tailscale, and the qemu guest agent)
+2. Set up and run a docker-compose file for a Rocker image including most of the packages you might ever need, and any extras that you ask for
+3. Set a unique hostname and machine ID
+4. Set a unique static IP address
+5. Change the Login and LUKS passwords to something unique you provide
+6. Change the LUKS volume key (so getting into one worker doesn't compromise encryption on all the workers
+7. Set up Clevis for policy-based decryption of your LUKS volume (automatic unlock - you'll need to provide your own infrastructure for this, such as Tang servers)
+
 ## Is this a good idea?
 
 I'll report back to you on that one. But if you just want to have a go running your slow, parallel R analyses on a bunch of computers, this should be a relatively quick way to get through the devops problems and into the programming problems.
