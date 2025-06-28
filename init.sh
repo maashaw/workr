@@ -76,7 +76,7 @@ sudo apt install -y \
 sudo cryptsetup luksChangeKey /dev/sda3 -d ./old.pw ./new.pw
 
 # Regenerate the volume encryption key
-sudo cryptsetup reencrypt /dev/sda3 -d ./new.pw
+sudo cryptsetup reencrypt /dev/sda3 -d ./new.pw --key-slot 0
 
 # Set up clevis for automatic policy-based decryption
 sudo clevis luks bind -y -d /dev/sda3 -k ./new.pw sss "$CLEVIS_POLICY"
