@@ -166,6 +166,16 @@ This is provided as-is in good faith in the hope that it's useful, but at the en
 Please contact directly me if you identify any critical security vulnerabilities, and I'll try to fix it quick.
 If you notice any other bugs or problems, raise an issue or send a pull request.
 
+## TODO
+There is no guarantee that any of these will ever be implemented, but they sound like nice ideas
+- Input validation for all parameters and abort on fail
+- Refactor the disk address (e.g. /dev/sda3) as a parameter, even if not exposed
+- Make various features optional (e.g. downloaded or static keys, Clevis, Tailscale, etc)
+- Allow the script to generate the new LUKS and Login keys instead of requiring the user to provide them
+- Allow the script to use mDNS to search for the current highest numbered suffix for a hostname stem, and select the next number
+- Allow the script to use mDNS to search for the current highest numbered IP in a given range, and select the next available number
+- 'Hands Off' mode, where it generates all the per-node unique values, then sends them to the user somehow (POST request? sendmail and/or gpg? "Copy this down and hit return to reboot"?
+
 ## See Also
 
 ### R Packages
