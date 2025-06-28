@@ -151,6 +151,9 @@ I've specified rocker/geospatial:4.4.2 in the init script. If you need a differe
 - How do I set up Tailscale on the worker nodes?
   - This is left as an exercise for the reader.
   - You can comment out the relevent lines from the script if you don't need it, and save a couple megabytes.
+- What can I specify as a Clevis policy?
+  - Have a look at the docs for Clevis (at the end)
+  - It's got to be valid JSON
 
 ### Example Values
 The example values above, including network addresses, credentials, etc are all made up. They won't work off the shelf, but they're easy to tailor to your environment.
@@ -163,8 +166,12 @@ Please contact directly me if you identify any critical security vulnerabilities
 If you notice any other bugs or problems, raise an issue or send a pull request.
 
 ## See Also
-[Parallel Package Documentation](https://search.r-project.org/R/refmans/parallel/html/00Index.html) [Future](https://future.futureverse.org) [Furrr](https://furrr.futureverse.org/index.html)
+
+### R Packages
+[Parallel](https://search.r-project.org/R/refmans/parallel/html/00Index.html) [Future](https://future.futureverse.org) [Furrr](https://furrr.futureverse.org/index.html)
+
+### Rocker Project
 [Rocker Project](https://rocker-project.org) [Rocker Repo](https://github.com/rocker-org/geospatial)
-[Tailscale](https://tailscale.com)
-[Docker](https://www.docker.com)
-[Clevis Repo](https://github.com/latchset/clevis)
+
+### Packages
+[Tailscale](https://tailscale.com) [Docker](https://www.docker.com) [Clevis](https://github.com/latchset/clevis)
