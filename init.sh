@@ -34,12 +34,12 @@ CLEVIS_POLICY=$(cat clevis.policy)
 R_PKGS=$(cat R.pkgs)
 
 # Create folders for docker
-echo 'Creating docker folders...'
+echo 'Creating docker folders...' | tee -a log.txt
 mkdir -p ~/rstudio
 mkdir -p ~/data
 
 # Write out docker compose file
-echo 'Writing out docker-compose...'
+echo 'Writing out docker-compose...' | tee -a log.txt
 cat > ~/rstudio/docker-compose.yml << EOF
 services:
   rstudio:
@@ -71,7 +71,7 @@ services:
 EOF
 
 # Add docker repo and key to sources
-echo 'Adding docker repo...'
+echo 'Adding docker repo...' | tee -a log.txt
 sudo install -m 0755 -d /etc/apt/keyrings
 sudo curl -fsSL https://download.docker.com/linux/ubuntu/gpg -o /etc/apt/keyrings/docker.asc
 sudo chmod a+r /etc/apt/keyrings/docker.asc
@@ -81,14 +81,14 @@ echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.
       sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
 
 # Add tailscale repo and key to sources
-echo 'Adding tailscale repo...'
+echo 'Adding tailscale repo...' | tee -a log.txt
 curl -fsSL https://pkgs.tailscale.com/stable/ubuntu/noble.noarmor.gpg | \
     sudo tee /usr/share/keyrings/tailscale-archive-keyring.gpg >/dev/null
 curl -fsSL https://pkgs.tailscale.com/stable/ubuntu/noble.tailscale-keyring.list | \
     sudo tee /etc/apt/sources.list.d/tailscale.list
 
 # Install neccessary packages
-echo 'Installing packages...'
+echo 'Installing packages...' | tee -a log.txt
 sudo apt update
 sudo apt upgrade -y
 sudo apt install -y \
@@ -100,19 +100,19 @@ sudo apt install -y \
     docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
 
 # Reset LUKS keys
-echo 'Changing LUKS key...'
+echo 'Changing LUKS key...' | tee -a log.txt
 sudo cryptsetup luksChangeKey /dev/sda3 -d ./old.pw ./new.pw
 
 # Regenerate the volume encryption key
-echo 'Changing LUKS Volume Key (Slow!)...'
+echo 'Changing LUKS Volume Key (Slow!)...' | tee -a log.txt
 sudo cryptsetup reencrypt /dev/sda3 -d ./new.pw --key-slot 0
 
 # Set up clevis for automatic policy-based decryption
-echo 'Enabling Clevis Policy-Based Decryption...'
+echo 'Enabling Clevis Policy-Based Decryption...' | tee -a log.txt
 sudo clevis luks bind -y -d /dev/sda3 -k ./new.pw sss "$CLEVIS_POLICY"
 
 # Set up serial port
-echo 'Setting up Serial Port...'
+echo 'Setting up Serial Port...' | tee -a log.txt
 sudo sed -i.bak '/^GRUB_CMDLINE_LINUX/ s/^/#/' /etc/default/grub
 cat <<EOF | sudo tee -a /etc/default/grub
 GRUB_CMDLINE_LINUX_DEFAULT="console=tty0 console=ttyS0,115200n8"
@@ -123,49 +123,50 @@ echo 'Updating Bootloader...'
 sudo update-grub
 
 # Update initramfs to load up clevis components
-echo 'Updating Initramfs...'
+echo 'Updating Initramfs...' | tee -a log.txt
 sudo update-initramfs -u -k 'all'
 
 # Set a new hostname so it's be updated on next boot
-echo 'Changing Hostname...'
+echo 'Changing Hostname...' | tee -a log.txt
 sudo hostnamectl set-hostname $HOSTNAME
 
 # Update the login password
-echo 'Changing Login Password...'
+echo 'Changing Login Password...' | tee -a log.txt
 sudo echo "$(whoami):$LOGIN_PW" | sudo chpasswd
 
 # Set the static IP and DNS details
-echo 'Setting static IP...'
+echo 'Setting static IP...' | tee -a log.txt
 sudo netplan set ethernets.$INTERFACE.addresses=[$IP]
 sudo netplan set ethernets.$INTERFACE.nameservers.addresses=[$DNS]
-sudo netplan apply
+# No need to apply yet, we'll be rebooting shortly anyway - but can uncomment if you're not on SSH and are impatient
+# sudo netplan apply
 
 # Remove existing SSH keys and generate new ones
-echo 'Generating new SSH Keys...'
+echo 'Generating new SSH Keys...' | tee -a log.txt
 sudo rm /etc/ssh/ssh_host_*
 sudo ssh-keygen -f /etc/ssh/ssh_host_ed25519_key -N '' -t ed25519
 sudo ssh-keygen -f /etc/ssh/ssh_host_rsa_key -N '' -t rsa -b 4096
 sudo ssh-keygen -f /etc/ssh/ssh_host_ecdsa_key -N '' -t ecdsa
 
 # Clear the machine ID so it's regenerated on next boot
-echo 'Clearing Machine ID...'
+echo 'Clearing Machine ID...' | tee -a log.txt
 sudo truncate -s0 /etc/machine-id 
 sudo rm /var/lib/dbus/machine-id
 sudo ln -s /etc/machine-id /var/lib/dbus/machine-id
 
 # Delete the params
-echo 'Cleaning up setup params...'
+echo 'Cleaning up setup params...' | tee -a log.txt
 sudo shred -u old.pw new.pw login.pw hostname.txt ip.txt dns.txt interface.txt key.pub key.url clevis.policy R.pkgs
 
 # clear the bash history so it's nice and clean
-echo 'Clearing Bash History...'
+echo 'Clearing Bash History...' | tee -a log.txt
 history -c
 history -w
 
 # start the docker container
-echo 'Starting Docker Container...'
+echo 'Starting Docker Container...' | tee -a log.txt
 sudo docker compose -f ~/rstudio/docker-compose.yml up -d
 
 # reboot
-echo 'Rebooting (If everything worked, no intervention should be needed)...'
+echo 'Rebooting (If everything worked, no intervention should be needed)...' | tee -a log.txt
 sudo reboot -n
