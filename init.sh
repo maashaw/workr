@@ -145,7 +145,7 @@ history -c
 history -w
 
 # start the docker container
-sudo docker compose up -d
+sudo docker compose -f ~/rstudio/docker-compose.yml up -d
 
 # reboot
 sudo reboot -n
