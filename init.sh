@@ -127,7 +127,7 @@ sudo netplan set ethernets.$INTERFACE.nameservers.addresses=[$DNS]
 sudo netplan apply
 
 # Remove existing SSH keys and generate new ones
-rm /etc/ssh/ssh_host_*
+sudo rm /etc/ssh/ssh_host_*
 sudo ssh-keygen -f /etc/ssh/ssh_host_ed25519_key -N '' -t ed25519
 sudo ssh-keygen -f /etc/ssh/ssh_host_rsa_key -N '' -t rsa -b 4096
 sudo ssh-keygen -f /etc/ssh/ssh_host_ecdsa_key -N '' -t ecdsa
