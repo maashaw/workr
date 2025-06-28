@@ -148,6 +148,9 @@ I've specified rocker/geospatial:4.4.2 in the init script. If you need a differe
 -  Why don't you use Hashicorp Vault / Docker Secrets / this neat auth solution
   - I wrote this in a couple hours to solve a problem I don't expect to have very often
   - Why not send me a pull request?
+- How do I set up Tailscale on the worker nodes?
+  - This is left as an exercise for the reader.
+  - You can comment out the relevent lines from the script if you don't need it, and save a couple megabytes.
 
 ### Example Values
 The example values above, including network addresses, credentials, etc are all made up. They won't work off the shelf, but they're easy to tailor to your environment.
@@ -158,3 +161,10 @@ This is provided as-is in good faith in the hope that it's useful, but at the en
 ## Bugs and Security Disclosures
 Please contact directly me if you identify any critical security vulnerabilities, and I'll try to fix it quick.
 If you notice any other bugs or problems, raise an issue or send a pull request.
+
+## See Also
+[Parallel Package Documentation](https://search.r-project.org/R/refmans/parallel/html/00Index.html) [Future](https://future.futureverse.org) [Furrr](https://furrr.futureverse.org/index.html)
+[Rocker Project](https://rocker-project.org) [Rocker Repo](https://github.com/rocker-org/geospatial)
+[Tailscale](https://tailscale.com)
+[Docker](https://www.docker.com)
+[Clevis Repo](https://github.com/latchset/clevis)
